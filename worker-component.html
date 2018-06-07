@@ -1,0 +1,62 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../cells-comlink-import/cells-comlink-import.html">
+
+<!--
+The `worker-component` element provides the possibility to execute through a web worker, the execution of JavaScript processes.
+
+```html
+<worker-component source="worker.js"></worker-component>
+```
+
+@demo demo/index.html
+-->
+
+<dom-module id="worker-component">
+  <script>
+    class WorkerComponent extends Polymer.Element {
+      static get is() {
+        return 'worker-component';
+      }
+      static get properties() {
+        return {
+          /**
+          * The Web Worker instance
+          */
+          worker: {
+            type: Object
+          },
+          /**
+          * Property to set the JavaScript file that run on web worker
+          */
+          source: {
+            type: String
+          },
+          /**
+          * The proxy instance to access Class expose from Web Worker
+          */
+          workerInstance: {
+            type: Object
+          }
+        };
+      }
+      connectedCallback() {
+        if (this.source) {
+          this.worker = new Worker(this.source);
+          /* WebWorkers use `postMessage` and therefore work with Comlink. */
+          /*global Comlink:true*/
+          this.workerInstance = Comlink.proxy(this.worker);
+        } else {
+          console.error('You must define worker name property');
+        }
+      }
+      disconnectedCallback() {
+        if (this.source) {
+          this.worker.terminate();
+        }
+      }
+    }
+
+    window.customElements.define(WorkerComponent.is, WorkerComponent);
+
+  </script>
+</dom-module>

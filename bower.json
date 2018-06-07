@@ -1,0 +1,18 @@
+{
+  "name": "worker-component",
+  "main": "worker-component.html",
+  "version": "1.0.0",
+  "description": "The worker-component element provides the possibility to execute through a web worker, the execution of JavaScript processes",
+  "keywords": [
+    "worker",
+    "comlink"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "comlink-import":"https://github.com/sergicontre/comlink-import.git"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  }
+}

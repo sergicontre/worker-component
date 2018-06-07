@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>worker-component test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../worker-component.html">
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <worker-component source="worker.js"></worker-component>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ErrorTestFixture">
+      <template>
+        <worker-component></worker-component>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('worker-component', () => {
+
+        test('instantiating the element with default properties works', () => {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.source, 'worker.js');
+
+        });
+
+        test('call method through the worker instance', (done) => {
+          const element = fixture('BasicTestFixture');
+
+          async function callWorker(){
+            let totalCount = 0;
+            let worker = await new element.workerInstance.App();
+            await worker.inc();
+            await worker.inc();
+            totalCount = await worker.count();
+            assert.equal(totalCount, 2);
+            done();
+          }
+          callWorker();
+        });
+
+        test('error dont have source', (done) => {
+          const element = fixture('ErrorTestFixture');
+          let totalCount = 0;
+
+          async function callWorker(){
+            let totalCount = 0;
+            assert.notEqual(totalCount, 2);
+            done();
+          }
+          callWorker();
+        });
+
+      });
+    </script>
+
+  </body>
+</html>
